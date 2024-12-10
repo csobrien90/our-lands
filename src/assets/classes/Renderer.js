@@ -44,8 +44,9 @@ export class Renderer {
   }
 
   createGridSection(x, y, grid) {
-    const element = document.createElement("div");
-	const isOwned = !grid.gridSectionsIOwn.includes(`${x}${y}`);
+	const element = document.createElement("div");
+	const gridSectionsIOwn = Object.keys(grid.gridToLot);
+	const isOwned = !gridSectionsIOwn.includes(`${x}${y}`);
     element.classList.add("grid-section");
     grid.grid[x].push(new GridSection(x, y, element, isOwned, this));
     grid.gridWrapper.appendChild(element);
