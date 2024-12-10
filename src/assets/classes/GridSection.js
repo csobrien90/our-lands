@@ -20,6 +20,7 @@ export class GridSection {
 	 */
 	constructor(x, y, element, isDisabled, renderer) {
 		// Translate x coordinate to letter
+		this.xAsNumber = x;
 		const letter = String.fromCharCode(65 + x);
 		this.x = letter;
 		this.y = y;

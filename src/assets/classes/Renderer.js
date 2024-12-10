@@ -57,15 +57,32 @@ export class Renderer {
 
     const sectionView = document.createElement("section");
     sectionView.id = `section-${section.x}${section.y}`;
+	sectionView.classList.add("section-view");
 
     const title = document.createElement("h2");
     title.textContent = `Section ${section.x}${section.y}`;
+	sectionView.appendChild(title);
+
+	const lot = this.grid.gridToLot[`${section.xAsNumber}${section.y}`];
+
+	if (lot) {
+		const lotList = document.createElement("ul");
+		lot.forEach((lotNumber) => {
+			const listItem = document.createElement("li");
+			listItem.textContent = lotNumber;
+			lotList.appendChild(listItem);
+		})
+
+		const lotTitle = document.createElement("h3");
+		lotTitle.textContent = "Lots in this section";
+		sectionView.appendChild(lotTitle);
+		sectionView.appendChild(lotList);
+	}
 
     const backButton = document.createElement("button");
     backButton.textContent = "Back";
     backButton.addEventListener("click", this.focusMap.bind(this));
 
-    sectionView.appendChild(title);
     sectionView.appendChild(backButton);
     this.main.appendChild(sectionView);
   }
