@@ -17,10 +17,31 @@ export class MapImage {
   }
 
   createImage() {
-    this.image = document.createElement("img");
-    this.image.src = "/src/map.png";
-    this.image.alt = "an overhead map of our property, an overlay of a satellite view, boundary lines, and labels";
+	const satelliteImg = document.createElement("img");
+	satelliteImg.src = "/src/assets/images/satellite-map.png";
+	satelliteImg.style.display = "none";
 
-    this.grid.gridWrapper.insertAdjacentElement("beforebegin", this.image);
+	const labeledImg = document.createElement("img");
+	labeledImg.src = "/src/assets/images/labeled-map.png";
+	labeledImg.style.display = "block";
+
+	const boundaryImg = document.createElement("img");
+	boundaryImg.src = "/src/assets/images/boundary-overlay.png";
+	boundaryImg.style.display = "block";
+
+	this.satelliteImg = satelliteImg;
+	this.labeledImg = labeledImg;
+	this.boundaryImg = boundaryImg;
+
+	this.renderImages();
+  }
+
+  renderImages() {
+	const main = this.grid.gridWrapper.parentElement;
+	main.appendChild(this.satelliteImg);
+	main.appendChild(this.labeledImg);
+	main.appendChild(this.boundaryImg);
+
+	this.controls.renderControls();
   }
 }

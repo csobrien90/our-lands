@@ -1,0 +1,41 @@
+#our-lands-app {
+	display: grid;
+	grid-template: "stack";
+	place-items: center;
+	aspect-ratio: 470 / 314;
+	max-height: 100vh;
+	max-width: 100vw;
+	position: relative;
+	
+	#grid-wrapper {
+		display: grid;
+		grid-template-columns: repeat(9, 1fr);
+		grid-template-rows: repeat(6, 1fr);
+		gap: 1px;
+		width: 100%;
+		height: 100%;
+		grid-area: stack;
+
+		.grid-section {
+			border: 1px solid green;
+			position: relative;
+			&:not(.disabled):hover::after {
+				content: attr(data-coords);
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 255, 0, 0.5);
+				cursor: pointer;
+				color: white;
+				display: grid;
+				place-items: center;
+			}
+			&.disabled {
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+		}
+	}
+
+}

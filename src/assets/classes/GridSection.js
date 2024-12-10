@@ -11,48 +11,53 @@ import { Comment } from "./Comment.js";
  * @property {Comment[]} comments - An array of Comment instances
  */
 export class GridSection {
-  /**
-   * @param {number} x - The x coordinate of the section
-   * @param {number} y - The y coordinate of the section
-   * @param {HTMLElement} element - The element that represents the section
-   * @param {Renderer} renderer - The Renderer
-   */
-  constructor(x, y, element, renderer) {
-    // Translate x coordinate to letter
-    const letter = String.fromCharCode(65 + x);
-    this.x = letter;
-    this.y = y;
-    element.dataset.coords = `${this.x}${this.y}`;
-    this.element = element;
-    this.renderer = renderer;
+	/**
+	 * @param {number} x - The x coordinate of the section
+	 * @param {number} y - The y coordinate of the section
+	 * @param {HTMLElement} element - The element that represents the section
+	 * @param {boolean} isDisabled - Whether the section is disabled
+	 * @param {Renderer} renderer - The Renderer
+	 */
+	constructor(x, y, element, isDisabled, renderer) {
+		// Translate x coordinate to letter
+		const letter = String.fromCharCode(65 + x);
+		this.x = letter;
+		this.y = y;
+		element.dataset.coords = `${this.x}${this.y}`;
+		this.element = element;
+		this.renderer = renderer;
 
-    this.comments = [];
+		this.comments = [];
 
-    this.init();
-  }
+		if (isDisabled) {
+			this.element.classList.add("disabled");
+		} else {
+			this.init();
+		}
+	}
 
-  init() {
-    this.element.addEventListener("click", this.handleClick.bind(this));
-  }
+	init() {
+		this.element.addEventListener("click", this.handleClick.bind(this));
+	}
 
-  handleClick() {
-    this.renderer.focusSection(this);
-  }
+	handleClick() {
+		this.renderer.focusSection(this);
+	}
 
-  /**
-   * Add a comment to the section
-   * @param {Comment} comment - The Comment instance
-   */
-  addComment(comment) {
-    this.comments.push(comment);
-  }
+	/**
+	 * Add a comment to the section
+	 * @param {Comment} comment - The Comment instance
+	 */
+	addComment(comment) {
+		this.comments.push(comment);
+	}
 
-  /**
-   * Remove a comment from the section
-   * @param {Comment} comment - The Comment instance
-   */
-  removeComment(comment) {
-    const index = this.comments.indexOf(comment);
-    this.comments.splice(index, 1);
-  }
+	/**
+	 * Remove a comment from the section
+	 * @param {Comment} comment - The Comment instance
+	 */
+	removeComment(comment) {
+		const index = this.comments.indexOf(comment);
+		this.comments.splice(index, 1);
+	}
 }

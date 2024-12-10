@@ -1,0 +1,23 @@
+#our-lands-app {
+	img {
+		width: 100%;
+		height: 100%;
+		object-fit: contain;
+		grid-area: stack;
+	}
+
+	#map-controls {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		background-color: rgba(0, 0, 0, 0.6);
+		padding: 0.5rem;
+		border-radius: 0.5rem;
+		margin: 0.5rem;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		gap: 0.5rem;
+		color: white;
+		z-index: 999;
+	}
+}

@@ -12,6 +12,8 @@ Gridded out map of our property
 
 Click on grid segment to open details page
 
+- by default, land is oriented for square grid placement; click on the compass to rotate the entire display to point north (so grid segments are diamond-shaped)
+
 Details:
 
 - display basic hardcoded info: coordinates, which lot it’s on, etc. things that can be hardcoded away from the land, and a zoomed image of this map segment

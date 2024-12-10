@@ -29,7 +29,7 @@ export class Renderer {
 
     // If the map image doesn't exist, create it
     if (!this.mapImage) this.createMapImage();
-    else this.main.appendChild(this.mapImage.image);
+    else this.mapImage.renderImages();
   }
 
   createGrid() {
@@ -45,8 +45,9 @@ export class Renderer {
 
   createGridSection(x, y, grid) {
     const element = document.createElement("div");
+	const isOwned = !grid.gridSectionsIOwn.includes(`${x}${y}`);
     element.classList.add("grid-section");
-    grid.grid[x].push(new GridSection(x, y, element, this));
+    grid.grid[x].push(new GridSection(x, y, element, isOwned, this));
     grid.gridWrapper.appendChild(element);
   }
 
