@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Lands</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+      body {
+        display: grid;
+        background-color: #777;
+      }
+      #our-lands-app {
+        display: grid;
+        grid-template: "stack";
+        place-items: center;
+        aspect-ratio: 470 / 314;
+        max-height: 100vh;
+        max-width: 100vw;
+        > img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          grid-area: stack;
+        }
+        #grid-wrapper {
+          display: grid;
+          grid-template-columns: repeat(10, 1fr);
+          grid-template-rows: repeat(7, 1fr);
+          gap: 1px;
+          width: 100%;
+          height: 100%;
+          grid-area: stack;
+
+          .grid-section {
+            border: 1px solid green;
+            position: relative;
+            &:hover::after {
+              content: attr(data-coords);
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: rgba(0, 255, 0, 0.5);
+              cursor: pointer;
+              color: white;
+              display: grid;
+              place-items: center;
+            }
+          }
+        }
+      }
+    </style>
+  </head>
+  <body></body>
+  <script type="module">
+    import { Renderer as OurLandsApp } from "./assets/classes/Renderer.js";
+    const ourLandsApp = new OurLandsApp();
+  </script>
+</html>
