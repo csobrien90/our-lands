@@ -2,7 +2,7 @@
 	display: grid;
 	grid-template: "stack";
 	place-items: center;
-	aspect-ratio: 470 / 314;
+	aspect-ratio: 825 / 460;
 	max-height: 100vh;
 	max-width: 100vw;
 	position: relative;

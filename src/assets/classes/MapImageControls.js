@@ -52,10 +52,28 @@ export class MapImageControls {
 		}
 	});
 
+	const orientationLabel = document.createElement("label");
+	orientationLabel.htmlFor = "orientation";
+	orientationLabel.textContent = "Align North/South";
+
+	const orientationInput = document.createElement("input");
+	orientationInput.type = "checkbox";
+	orientationInput.id = "orientation";
+
+	orientationInput.addEventListener("change", () => {
+		if (orientationInput.checked) {
+			this.mapImage.grid.renderer.main.classList.add("north");
+		} else {
+			this.mapImage.grid.renderer.main.classList.remove("north");
+		}
+	})
+
 	controls.appendChild(viewToggleLabel);
 	controls.appendChild(viewToggle);
 	controls.appendChild(boundaryLabel);
 	controls.appendChild(boundaryInput);
+	controls.appendChild(orientationLabel);
+	controls.appendChild(orientationInput);
 
 	this.mapImage.grid.gridWrapper.parentElement.appendChild(controls);
   }
