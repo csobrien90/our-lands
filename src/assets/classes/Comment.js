@@ -1,6 +1,13 @@
 import { GridSection } from "./GridSection.js";
 
 /**
+ * @typedef {Object} coordinates
+ * @property {number} lat - The latitude
+ * @property {number} long - The longitude
+ */
+
+
+/**
  * Comment
  * @class
  * @classdesc Represents a historical datapoint for a GridSection. Comments have a many-to-one relationship with GridSections.
@@ -9,10 +16,12 @@ export class Comment {
   /**
    * @param {GridSection} gridSection - The GridSection instance
    * @param {string | File} data - The data for the comment
+   * @param {coordinates} coordinates (Optional) - The lat/long of the location this comment is associated with
    */
-  constructor(gridSection, data) {
+  constructor(gridSection, data, coordinates = null) {
     this.gridSection = gridSection;
     this.data = data;
+	this.coordinates = coordinates;
 	this.timestamp = new Date();
   }
 

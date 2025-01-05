@@ -97,19 +97,40 @@ export class Renderer {
 		if (!commentData) return;
 		const commentItem = document.createElement("li");
 		commentItem.appendChild(commentData);
+
+		if (comment.coordinates) {
+			const coordinates = document.createElement("a");
+			coordinates.href = `https://www.google.com/maps/search/?api=1&query=${comment.coordinates.latitude},${comment.coordinates.longitude}`;
+			coordinates.textContent = "View on map";
+			coordinates.target = "_blank";
+			commentItem.appendChild(coordinates);
+		}
+
 		comments.appendChild(commentItem);
 	})
 
+	// Include coordinates checkbox
+	const coordinatesCheckbox = document.createElement("input");
+	coordinatesCheckbox.type = "checkbox";
+
+	const coordinatesLabel = document.createElement("label");
+	coordinatesLabel.textContent = "Add coordinates to comment";
+	coordinatesLabel.appendChild(coordinatesCheckbox);
+
+	sectionView.appendChild(coordinatesLabel);
+
 	// Add text comment form
 	const commentForm = document.createElement("form");
-	commentForm.addEventListener("submit", (event) => {
+	commentForm.addEventListener("submit", async (event) => {
 		event.preventDefault();
 		const formData = new FormData(commentForm);
 		const commentText = formData.get("comment");
 
 		if (!commentText) return;
 
-		const newComment = new Comment(section, commentText);
+		let coordinates = null;
+		if (coordinatesCheckbox.checked) coordinates = await this.getCurrentLocation()
+		const newComment = new Comment(section, commentText, coordinates);
 		section.addComment(newComment);
 		this.focusSection(section);
 	})
@@ -133,7 +154,7 @@ export class Renderer {
 	imageInput.name = "image";
 	imageInput.accept = "image/*";
 
-	imageInput.addEventListener("change", (event) => {
+	imageInput.addEventListener("change", async (event) => {
 		const file = event.target.files[0];
 
 		if (!file || !file.type.startsWith("image/")) {
@@ -142,7 +163,10 @@ export class Renderer {
 			return;
 		}
 
-		const newComment = new Comment(section, file);
+		let coordinates = null;
+		if (coordinatesCheckbox.checked) coordinates = await this.getCurrentLocation();
+
+		const newComment = new Comment(section, file, coordinates);
 		section.addComment(newComment);
 		this.focusSection(section);
 	})
@@ -150,4 +174,34 @@ export class Renderer {
 	sectionView.appendChild(imageInput);
     this.main.appendChild(sectionView);
   }
+
+  async getCurrentLocation() {
+	return new Promise((resolve, reject) => {
+		if (!navigator.geolocation) {
+			alert("Geolocation is not supported by your browser.");
+			resolve(null);
+		}
+
+		const success = async (position) => {
+			// Note:
+			// 	It is unclear whether this will be accurate enough for its purpose.
+			// 	When app is deployed and working on mobile, accuracy should be tested.
+			// console.log({position});
+			// alert(`Accuracy: ${position.coords.accuracy}`);
+ 
+			const latitude = position.coords.latitude;
+			const longitude = position.coords.longitude;
+			resolve({ latitude, longitude });
+
+		}
+
+		const error = () => {
+			alert("Unable to retrieve location.");
+			resolve(null);
+		}
+
+		navigator.geolocation.getCurrentPosition(success, error);
+	})
+  }
+  
 }
