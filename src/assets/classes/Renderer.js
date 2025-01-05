@@ -1,6 +1,7 @@
 import { Grid } from "./Grid.js";
 import { GridSection } from "./GridSection.js";
 import { MapImage } from "./MapImage.js";
+import { Comment } from "./Comment.js";
 
 export class Renderer {
   constructor() {
@@ -59,9 +60,18 @@ export class Renderer {
     sectionView.id = `section-${section.x}${section.y}`;
 	sectionView.classList.add("section-view");
 
+	const header = document.createElement("header");
+
     const title = document.createElement("h2");
     title.textContent = `Section ${section.x}${section.y}`;
-	sectionView.appendChild(title);
+	header.appendChild(title);
+
+	const backButton = document.createElement("button");
+    backButton.textContent = "Back";
+    backButton.addEventListener("click", this.focusMap.bind(this));
+    header.appendChild(backButton);
+
+	sectionView.appendChild(header);
 
 	const lot = this.grid.gridToLot[`${section.xAsNumber}${section.y}`];
 
@@ -79,11 +89,65 @@ export class Renderer {
 		sectionView.appendChild(lotList);
 	}
 
-    const backButton = document.createElement("button");
-    backButton.textContent = "Back";
-    backButton.addEventListener("click", this.focusMap.bind(this));
+	// Add comments
+	const comments = document.createElement("ul");
+	comments.classList.add("comments");
+	section.comments.forEach((comment) => {
+		const commentData = comment.getData();
+		if (!commentData) return;
+		const commentItem = document.createElement("li");
+		commentItem.appendChild(commentData);
+		comments.appendChild(commentItem);
+	})
 
-    sectionView.appendChild(backButton);
+	// Add text comment form
+	const commentForm = document.createElement("form");
+	commentForm.addEventListener("submit", (event) => {
+		event.preventDefault();
+		const formData = new FormData(commentForm);
+		const commentText = formData.get("comment");
+
+		if (!commentText) return;
+
+		const newComment = new Comment(section, commentText);
+		section.addComment(newComment);
+		this.focusSection(section);
+	})
+
+	const commentInput = document.createElement("input");
+	commentInput.type = "text";
+	commentInput.name = "comment";
+	commentForm.appendChild(commentInput);
+
+	const commentSubmit = document.createElement("button");
+	commentSubmit.type = "submit";
+	commentSubmit.textContent = "Add comment";
+	commentForm.appendChild(commentSubmit);
+
+	sectionView.appendChild(comments);
+	sectionView.appendChild(commentForm);
+
+	// Add image upload
+	const imageInput = document.createElement("input");
+	imageInput.type = "file";
+	imageInput.name = "image";
+	imageInput.accept = "image/*";
+
+	imageInput.addEventListener("change", (event) => {
+		const file = event.target.files[0];
+
+		if (!file || !file.type.startsWith("image/")) {
+			imageInput.value = "";
+			alert("Please select an image file.");
+			return;
+		}
+
+		const newComment = new Comment(section, file);
+		section.addComment(newComment);
+		this.focusSection(section);
+	})
+
+	sectionView.appendChild(imageInput);
     this.main.appendChild(sectionView);
   }
 }
