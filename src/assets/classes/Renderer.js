@@ -110,6 +110,9 @@ export class Renderer {
 		const deleteButton = document.createElement("button");
 		deleteButton.textContent = "Delete";
 		deleteButton.addEventListener("click", () => {
+			// Confirm deletion
+			if (!confirm("Are you sure you want to delete this comment?")) return;
+
 			section.removeComment(comment);
 			this.focusSection(section);
 		})
