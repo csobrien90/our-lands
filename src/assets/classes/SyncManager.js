@@ -26,7 +26,8 @@ export class SyncManager {
 			const request = store.getAll();
 
 			request.onsuccess = () => {
-				resolve(request.result);
+				const gridData = request.result;
+				resolve(gridData);
 			}
 
 			request.onerror = (event) => {
@@ -83,6 +84,55 @@ export class SyncManager {
 					reject();
 				}
 			})
+		})
+	})
+  }
+
+  saveComment(comment) {
+	return new Promise((resolve, reject) => {
+		this.connectToDB().then((db) => {
+			const transaction = db.transaction('gridSections', 'readwrite');
+			const store = transaction.objectStore('gridSections');
+			const request = store.get(`${comment.gridSection.xAsNumber}${comment.gridSection.y}`);
+			request.onsuccess = () => {
+				const record = request.result;
+				record.comments.push({
+					data: comment.data,
+					coordinates: comment.coordinates,
+					epoch: comment.timestamp.getTime()
+				});
+				const updateRequest = store.put(record);
+				updateRequest.onsuccess = () => {
+					resolve();
+				}
+				updateRequest.onerror = (event) => {
+					console.error('Error saving comment:', event.target.error);
+					reject();
+				}
+			}
+		})
+	})
+  }
+
+  deleteComment(comment) {
+	return new Promise((resolve, reject) => {
+		this.connectToDB().then((db) => {
+			const transaction = db.transaction('gridSections', 'readwrite');
+			const store = transaction.objectStore('gridSections');
+			const request = store.get(`${comment.gridSection.xAsNumber}${comment.gridSection.y}`);
+			request.onsuccess = () => {
+				const record = request.result;
+				const commentIndex = record.comments.findIndex((c) => c.epoch === comment.timestamp.getTime());
+				record.comments.splice(commentIndex, 1);
+				const updateRequest = store.put(record);
+				updateRequest.onsuccess = () => {
+					resolve();
+				}
+				updateRequest.onerror = (event) => {
+					console.error('Error deleting comment:', event.target.error);
+					reject();
+				}
+			}
 		})
 	})
   }

@@ -36,11 +36,12 @@ export class GridSection {
 		element.dataset.coords = `${this.x}${this.y}`;
 		this.element = element;
 		this.renderer = renderer;
+		this.grid = renderer.grid;
 
 		this.comments = [];
 		if (commentData) {
 			commentData.forEach((data) => {
-				this.comments.push(new Comment(data.data, this, data.coordinates, data.epoch));
+				this.comments.push(new Comment(this, data.data, data.coordinates, data.epoch));
 			});
 		}
 
@@ -65,6 +66,7 @@ export class GridSection {
 	 */
 	addComment(comment) {
 		this.comments.push(comment);
+		this.grid.syncManager.saveComment(comment);
 	}
 
 	/**
@@ -74,5 +76,6 @@ export class GridSection {
 	removeComment(comment) {
 		const index = this.comments.indexOf(comment);
 		this.comments.splice(index, 1);
+		this.grid.syncManager.deleteComment(comment);
 	}
 }
