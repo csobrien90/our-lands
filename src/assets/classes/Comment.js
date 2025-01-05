@@ -17,12 +17,13 @@ export class Comment {
    * @param {GridSection} gridSection - The GridSection instance
    * @param {string | File} data - The data for the comment
    * @param {coordinates} coordinates (Optional) - The lat/long of the location this comment is associated with
+   * @param {number} epoch (Optional) - The epoch time of the comment
    */
-  constructor(gridSection, data, coordinates = null) {
+  constructor(gridSection, data, coordinates = null, epoch = null) {
     this.gridSection = gridSection;
     this.data = data;
 	this.coordinates = coordinates;
-	this.timestamp = new Date();
+	this.timestamp = epoch ? new Date(epoch) : new Date();
   }
 
   /**

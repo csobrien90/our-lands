@@ -1,4 +1,5 @@
 import { Renderer } from "./Renderer.js";
+import { SyncManager } from "./SyncManager.js";
 
 /**
  * Grid
@@ -55,16 +56,35 @@ export class Grid {
   constructor(gridWrapper, renderer) {
     this.gridWrapper = gridWrapper;
     this.renderer = renderer;
+	this.syncManager = new SyncManager(this);
     this.grid = [];
-    this.createGrid();
+    this.makeGrid();
   }
 
-  createGrid() {
-    for (let i = 0; i < 6; i++) {
-      this.grid.push([]);
-      for (let j = 0; j < 9; j++) {
-        this.renderer.createGridSection(i, j, this);
-      }
-    }
+  async makeGrid() {
+	// Get grid data from IndexedDB
+	const gridData = await this.syncManager.loadGrid();
+	console.log({gridData});
+	
+	if (!gridData || !gridData.length) {
+		// Create grid
+		this.syncManager.createGridRecord();
+
+		for (let i = 0; i < 6; i++) {
+			this.grid.push([]);
+			for (let j = 0; j < 9; j++) {
+				this.renderer.createGridSection(i, j, this);
+			}
+		}
+	} else {
+		// Load grid from IndexedDB
+		for (let i = 0; i < 6; i++) {
+			this.grid.push([]);
+			for (let j = 0; j < 9; j++) {
+				const gridSectionData = gridData.find((data) => data.x === i && data.y === j);
+				this.renderer.createGridSection(i, j, this, gridSectionData?.comments);
+			}
+		}
+	}
   }
 }

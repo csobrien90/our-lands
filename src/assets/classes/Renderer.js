@@ -44,12 +44,12 @@ export class Renderer {
     this.mapImage = new MapImage(this.grid);
   }
 
-  createGridSection(x, y, grid) {
+  createGridSection(x, y, grid, commentData) {
 	const element = document.createElement("div");
 	const gridSectionsIOwn = Object.keys(grid.gridToLot);
 	const isOwned = !gridSectionsIOwn.includes(`${x}${y}`);
     element.classList.add("grid-section");
-    grid.grid[x].push(new GridSection(x, y, element, isOwned, this));
+    grid.grid[x].push(new GridSection(x, y, element, isOwned, this, commentData));
     grid.gridWrapper.appendChild(element);
   }
 
@@ -105,6 +105,15 @@ export class Renderer {
 			coordinates.target = "_blank";
 			commentItem.appendChild(coordinates);
 		}
+
+		// Delete button
+		const deleteButton = document.createElement("button");
+		deleteButton.textContent = "Delete";
+		deleteButton.addEventListener("click", () => {
+			section.removeComment(comment);
+			this.focusSection(section);
+		})
+		commentItem.appendChild(deleteButton);
 
 		comments.appendChild(commentItem);
 	})

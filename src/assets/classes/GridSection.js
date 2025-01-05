@@ -12,13 +12,22 @@ import { Comment } from "./Comment.js";
  */
 export class GridSection {
 	/**
+	 * CommentData
+	 * @typedef {Object} CommentData
+	 * @property {number} epoch - The epoch time of the comment
+	 * @property {string} data - The text comment or base64 image data
+	 * @property {import("./Comment.js").coordinates} coordinates - The coordinates of the comment
+	 */
+
+	/**
 	 * @param {number} x - The x coordinate of the section
 	 * @param {number} y - The y coordinate of the section
 	 * @param {HTMLElement} element - The element that represents the section
 	 * @param {boolean} isDisabled - Whether the section is disabled
 	 * @param {Renderer} renderer - The Renderer
+	 * @param {CommentData} commentData - The data for the comments (from IndexedDB)
 	 */
-	constructor(x, y, element, isDisabled, renderer) {
+	constructor(x, y, element, isDisabled, renderer, commentData = null) {
 		// Translate x coordinate to letter
 		this.xAsNumber = x;
 		const letter = String.fromCharCode(65 + x);
@@ -29,6 +38,11 @@ export class GridSection {
 		this.renderer = renderer;
 
 		this.comments = [];
+		if (commentData) {
+			commentData.forEach((data) => {
+				this.comments.push(new Comment(data.data, this, data.coordinates, data.epoch));
+			});
+		}
 
 		if (isDisabled) {
 			this.element.classList.add("disabled");
