@@ -25,15 +25,44 @@
 		}
 	}
 
-	ul {
-		list-style-type: none;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1rem;
+	.lots {
+		display: grid;
+		gap: .5rem;
+
+		ul {
+			list-style-type: none;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+	
+		li {
+			padding: .5rem 1rem;
+			border: 1px solid white;
+		}
 	}
 
-	li {
+	.comment-type-label {
 		padding: 1rem;
 		border: 1px solid white;
+		cursor: pointer;
+
+		&:hover {
+			background-color: rgba(255, 255, 255, 0.1);
+		}
+	}
+
+	input[name="comment-type"],
+	label[for="coordinates"],
+	#comment-form,
+	#image,
+	&:has(input[name="comment-type"]:checked) .comment-type-label {
+		display: none;
+	}
+
+	&:has(input[name="comment-type"]:checked) label[for="coordinates"],
+	&:has(#comment-type-text:checked) #comment-form,
+	&:has(#comment-type-image:checked) #image {
+		display: block;
 	}
 }

@@ -77,6 +77,8 @@ export class Renderer {
 	const lot = this.grid.gridToLot[`${section.xAsNumber}${section.y}`];
 
 	if (lot) {
+		const lotWrapper = document.createElement("div");
+		lotWrapper.classList.add("lots");
 		const lotList = document.createElement("ul");
 		lot.forEach((lotNumber) => {
 			const listItem = document.createElement("li");
@@ -86,8 +88,9 @@ export class Renderer {
 
 		const lotTitle = document.createElement("h3");
 		lotTitle.textContent = "Lots in this section";
-		sectionView.appendChild(lotTitle);
-		sectionView.appendChild(lotList);
+		lotWrapper.appendChild(lotTitle);
+		lotWrapper.appendChild(lotList);
+		sectionView.appendChild(lotWrapper);
 	}
 
 	// Add comments
@@ -122,18 +125,35 @@ export class Renderer {
 		comments.appendChild(commentItem);
 	})
 
-	// Include coordinates checkbox
-	const coordinatesCheckbox = document.createElement("input");
-	coordinatesCheckbox.type = "checkbox";
+	sectionView.appendChild(comments);
 
-	const coordinatesLabel = document.createElement("label");
-	coordinatesLabel.textContent = "Add coordinates to comment";
-	coordinatesLabel.appendChild(coordinatesCheckbox);
+	// Add comment type selection (text or image)
+	const commentTypeText = document.createElement("input");
+	commentTypeText.type = "radio";
+	commentTypeText.name = "comment-type";
+	commentTypeText.id = "comment-type-text";
+	const commentTypeLabel = document.createElement("label");
+	commentTypeLabel.htmlFor = "comment-type-text";
+	commentTypeLabel.classList.add("comment-type-label");
+	commentTypeLabel.textContent = "Text comment";
 
-	sectionView.appendChild(coordinatesLabel);
+	const commentTypeImage = document.createElement("input");
+	commentTypeImage.type = "radio";
+	commentTypeImage.name = "comment-type";
+	commentTypeImage.id = "comment-type-image";
+	const commentTypeImageLabel = document.createElement("label");
+	commentTypeImageLabel.htmlFor = "comment-type-image";
+	commentTypeImageLabel.classList.add("comment-type-label");
+	commentTypeImageLabel.textContent = "Image comment";
+
+	commentTypeLabel.appendChild(commentTypeText);
+	sectionView.appendChild(commentTypeLabel);
+	commentTypeImageLabel.appendChild(commentTypeImage);
+	sectionView.appendChild(commentTypeImageLabel);
 
 	// Add text comment form
 	const commentForm = document.createElement("form");
+	commentForm.id = "comment-form";
 	commentForm.addEventListener("submit", async (event) => {
 		event.preventDefault();
 		const formData = new FormData(commentForm);
@@ -148,9 +168,11 @@ export class Renderer {
 		this.focusSection(section);
 	})
 
-	const commentInput = document.createElement("input");
-	commentInput.type = "text";
+	const commentInput = document.createElement("textarea");
+	commentInput.rows = 4;
+	commentInput.id = "comment";
 	commentInput.name = "comment";
+	commentInput.placeholder = "Enter your comment here";
 	commentForm.appendChild(commentInput);
 
 	const commentSubmit = document.createElement("button");
@@ -158,13 +180,13 @@ export class Renderer {
 	commentSubmit.textContent = "Add comment";
 	commentForm.appendChild(commentSubmit);
 
-	sectionView.appendChild(comments);
 	sectionView.appendChild(commentForm);
 
 	// Add image upload
 	const imageInput = document.createElement("input");
 	imageInput.type = "file";
 	imageInput.name = "image";
+	imageInput.id = "image";
 	imageInput.accept = "image/*";
 
 	imageInput.addEventListener("change", async (event) => {
@@ -185,6 +207,18 @@ export class Renderer {
 	})
 
 	sectionView.appendChild(imageInput);
+
+	// Include coordinates checkbox
+	const coordinatesCheckbox = document.createElement("input");
+	coordinatesCheckbox.type = "checkbox";
+	coordinatesCheckbox.name = "coordinates";
+	coordinatesCheckbox.id = "coordinates";
+	const coordinatesLabel = document.createElement("label");
+	coordinatesLabel.htmlFor = "coordinates";
+	coordinatesLabel.textContent = "Add coordinates to comment";
+	coordinatesLabel.appendChild(coordinatesCheckbox);
+	sectionView.appendChild(coordinatesLabel);
+
     this.main.appendChild(sectionView);
   }
 
