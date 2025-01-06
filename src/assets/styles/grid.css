@@ -5,8 +5,7 @@
 	aspect-ratio: 825 / 460;
 	max-height: 100vh;
 	max-width: 100vw;
-	position: relative;
-	
+
 	#grid-wrapper {
 		display: grid;
 		grid-template-columns: repeat(9, 1fr);
@@ -15,6 +14,7 @@
 		width: 100%;
 		height: 100%;
 		grid-area: stack;
+		z-index: 100;
 
 		.grid-section {
 			border: 1px solid green;

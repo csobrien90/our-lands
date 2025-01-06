@@ -5,7 +5,13 @@
 	font-family: sans-serif;
 }
 
+html {
+	min-height: 100vh;
+}
+
 body {
 	display: grid;
 	background-color: #777;
+	min-height: 100vh;
+	justify-content: center;
 }

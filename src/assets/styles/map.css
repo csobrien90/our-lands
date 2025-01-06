@@ -1,11 +1,4 @@
 #our-lands-app {
-	transition: all 0.3s ease;
-
-	&.north {
-		rotate: 40deg;
-		scale: .8;
-	}
-
 	img {
 		width: 100%;
 		height: 100%;
@@ -14,11 +7,11 @@
 	}
 
 	#map-controls {
-		position: absolute;
-		bottom: 0;
-		right: 0;
+		position: fixed;
+		bottom: 0.5rem;
+		right: 1rem;
 		background-color: rgba(0, 0, 0, 0.6);
-		padding: 0.5rem;
+		padding: 1rem;
 		border-radius: 0.5rem;
 		margin: 0.5rem;
 		display: grid;
@@ -26,5 +19,23 @@
 		gap: 0.5rem;
 		color: white;
 		z-index: 999;
+		font-size: 1.5rem;
 	}
+
+	/* Rotate the map to align due north */
+	--grid-transition-curve: cubic-bezier(0.4, 0, 0.2, 1);
+	#grid-wrapper, img {
+		transition: 
+			rotate 0.2s var(--grid-transition-curve),
+			scale 0.2s var(--grid-transition-curve),
+			transform 0.2s var(--grid-transition-curve);
+	}
+	&.north, &.north {
+		#grid-wrapper, img {
+			rotate: 40deg;
+			scale: .75;
+			transform: translateY(-20%);
+		}
+	}
+
 }
