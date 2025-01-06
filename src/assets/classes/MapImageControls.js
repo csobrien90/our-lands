@@ -11,19 +11,23 @@ export class MapImageControls {
    */
   constructor(mapImage) {
     this.mapImage = mapImage;
+	this.syncManager = mapImage.grid.syncManager
   }
 
-  renderControls() {
+  async renderControls() {
+	const settings = await this.syncManager.getSettings()
+
 	const controls = document.createElement("div");
 	controls.id = "map-controls";
 	
 	const viewToggleLabel = document.createElement("label");
 	viewToggleLabel.htmlFor = "view-toggle";
-	viewToggleLabel.textContent = "Satellite/Labeled";
+	viewToggleLabel.textContent = "Labeled/Satellite";
 
 	const viewToggle = document.createElement("input");
 	viewToggle.type = "checkbox";
 	viewToggle.id = "view-toggle";
+	viewToggle.checked = settings.view === "satellite";
 
 	viewToggle.addEventListener("change", () => {
 		if (viewToggle.checked) {
@@ -33,6 +37,8 @@ export class MapImageControls {
 			this.mapImage.satelliteImg.style.display = "none";
 			this.mapImage.labeledImg.style.display = "block";
 		}
+
+		this.syncManager.updateSettings({ view: viewToggle.checked ? "satellite" : "labeled" });
 	});
 
 	const boundaryLabel = document.createElement("label");
@@ -42,7 +48,7 @@ export class MapImageControls {
 	const boundaryInput = document.createElement("input");
 	boundaryInput.type = "checkbox";
 	boundaryInput.id = "boundary";
-	boundaryInput.checked = true;
+	boundaryInput.checked = settings.showBoundary;
 
 	boundaryInput.addEventListener("change", () => {
 		if (boundaryInput.checked) {
@@ -50,6 +56,8 @@ export class MapImageControls {
 		} else {
 			this.mapImage.boundaryImg.style.display = "none";
 		}
+
+		this.syncManager.updateSettings({ showBoundary: boundaryInput.checked })
 	});
 
 	const orientationLabel = document.createElement("label");
@@ -59,6 +67,7 @@ export class MapImageControls {
 	const orientationInput = document.createElement("input");
 	orientationInput.type = "checkbox";
 	orientationInput.id = "orientation";
+	orientationInput.checked = settings.alignNorth;
 
 	orientationInput.addEventListener("change", () => {
 		if (orientationInput.checked) {
@@ -66,6 +75,8 @@ export class MapImageControls {
 		} else {
 			this.mapImage.grid.renderer.main.classList.remove("north");
 		}
+
+		this.syncManager.updateSettings({ alignNorth: orientationInput.checked });
 	})
 
 	controls.appendChild(viewToggleLabel);

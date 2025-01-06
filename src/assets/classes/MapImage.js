@@ -16,18 +16,22 @@ export class MapImage {
     this.createImage();
   }
 
-  createImage() {
+  async createImage() {
 	const satelliteImg = document.createElement("img");
 	satelliteImg.src = "/src/assets/images/satellite-map.png";
-	satelliteImg.style.display = "none";
-
+	
 	const labeledImg = document.createElement("img");
 	labeledImg.src = "/src/assets/images/labeled-map.png";
-	labeledImg.style.display = "block";
-
+	
 	const boundaryImg = document.createElement("img");
 	boundaryImg.src = "/src/assets/images/boundary-overlay.png";
-	boundaryImg.style.display = "block";
+
+	// Get saved user settings and apply them
+	const settings = await this.grid.syncManager.getSettings();
+	satelliteImg.style.display = settings.view === "labeled" ? "none" : "block";
+	labeledImg.style.display = settings.view === "labeled" ? "block" : "none";
+	boundaryImg.style.display = settings.showBoundary ? "block" : "none";
+	if (settings.alignNorth) this.grid.renderer.main.classList.add("north");
 
 	this.satelliteImg = satelliteImg;
 	this.labeledImg = labeledImg;

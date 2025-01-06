@@ -136,4 +136,44 @@ export class SyncManager {
 		})
 	})
   }
+
+  defaultSettings = {
+	view: 'labeled',
+	showBoundary: true,
+	alignNorth: false
+}
+
+  async updateSettings(settings) {
+	const newSettings = {
+		view: settings?.view,
+		showBoundary: settings?.showBoundary,
+		alignNorth: settings?.alignNorth,
+	}
+
+	for (const key in newSettings) {
+		if (newSettings[key] === undefined) delete newSettings[key];
+	}
+
+	const oldSettings = await this.getSettings();
+	const mergedSettings = {...this.defaultSettings, ...oldSettings, ...newSettings};
+	localStorage.setItem('our-lands-settings', JSON.stringify(mergedSettings));
+
+	return mergedSettings;
+  }
+
+  async getSettings() {
+	return new Promise((resolve, reject) => {
+		const settings = localStorage.getItem('our-lands-settings');
+		if (settings) {
+			try {
+				resolve(JSON.parse(settings));
+			} catch (error) {
+				resolve(this.defaultSettings);
+			}
+		} else {
+			resolve(this.defaultSettings);
+		}
+	})
+  }
+
 }
