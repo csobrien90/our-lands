@@ -13,5 +13,19 @@ body {
 	display: grid;
 	background-color: #777;
 	min-height: 100vh;
-	justify-content: center;
+	justify-content: stretch;
+	font-size: 1.25rem;
+
+	&:has(#grid-wrapper) {
+		justify-content: center;
+	}
+}
+
+button, input, select, textarea {
+	font-family: inherit;
+	font-size: inherit;
+}
+
+main {
+	width: 100%;
 }

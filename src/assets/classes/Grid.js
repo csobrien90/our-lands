@@ -64,8 +64,7 @@ export class Grid {
   async makeGrid() {
 	// Get grid data from IndexedDB
 	const gridData = await this.syncManager.loadGrid();
-	console.log({gridData});
-	
+
 	if (!gridData || !gridData.length) {
 		// Create grid
 		this.syncManager.createGridRecord();

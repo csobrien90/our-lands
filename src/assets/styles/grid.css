@@ -1,4 +1,4 @@
-#our-lands-app {
+#our-lands-app:has(#grid-wrapper) {
 	display: grid;
 	grid-template: "stack";
 	place-items: center;

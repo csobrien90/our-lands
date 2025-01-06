@@ -47,9 +47,10 @@ export class Renderer {
   createGridSection(x, y, grid, commentData) {
 	const element = document.createElement("div");
 	const gridSectionsIOwn = Object.keys(grid.gridToLot);
-	const isOwned = !gridSectionsIOwn.includes(`${x}${y}`);
+	const isOwned = gridSectionsIOwn.includes(`${x}${y}`);
     element.classList.add("grid-section");
-    grid.grid[x].push(new GridSection(x, y, element, isOwned, this, commentData));
+	if (isOwned) element.tabIndex = 0;
+    grid.grid[x].push(new GridSection(x, y, element, !isOwned, this, commentData));
     grid.gridWrapper.appendChild(element);
   }
 

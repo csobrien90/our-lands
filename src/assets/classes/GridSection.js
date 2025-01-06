@@ -54,6 +54,11 @@ export class GridSection {
 
 	init() {
 		this.element.addEventListener("click", this.handleClick.bind(this));
+		this.element.addEventListener("keydown", (e) => {
+			if (e.key === "Enter" || e.key === " ") {
+				this.handleClick();
+			}
+		});
 	}
 
 	handleClick() {
